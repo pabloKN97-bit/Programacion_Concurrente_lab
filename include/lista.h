@@ -1,9 +1,9 @@
 #ifndef _LISTA_
 #define _LISTA_
 
-typedef struct Nodo
+typedef struct TNodo
 {
-  char valor;
+  char *valor;
   struct Nodo *pSiguiente;
 } TNodo;
 

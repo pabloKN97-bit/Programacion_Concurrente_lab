@@ -25,19 +25,21 @@ void liberar_recursos();
 
 int g_nProcesses;
 struct TProcess_t *g_process_table;
-TLista *patrones;
+TLista patrones;
 
 int main(int argc, char *argv[])
+//falta echarle un vistazo al main que hay cosas que no funcionan
 {
   char *nombre_fichero = NULL, *fichero_patrones = NULL;
   int lineas = 0;
   patrones = malloc(sizeof(TLista));
-
-  crear(patrones, "PATRONES");
+  TLista patrones;
+//cambiar crear(&patrones)
+  crear(&patrones);
   procesar_argumentos(argc, argv, &nombre_fichero, &fichero_patrones, &lineas);
   instalar_manejador_senhal();
   procesar_patrones(fichero_patrones);
-  iniciar_tabla_procesos(lineas, longitud(patrones) - 1);
+  iniciar_tabla_procesos(lineas, longitud(&patrones) - 1);
   crear_procesos(nombre_fichero);
   esperar_procesos();
 
@@ -57,8 +59,23 @@ void procesar_argumentos(int argc, char *argv[], char **nombrefichero, char **fi
     fprintf(stderr, "Error. Usa: ./exec/manager <fichero> <fichero_patrones>.\n");
     exit(EXIT_FAILURE);
   }
+  *nombrefichero = argv[1];
+  *fichero_patrones = argv[2];
 
-  //TODO: Validar que los argumentos sean correctos (fichero de texto y fichero de patrones)
+  //pa contar las lineas
+  if((fp = fopen(*nombrefichero, "r")) == NULL){
+    //fprintf es como printf de JAva, para añadir datos a media frase sin necesidad de cortarla
+    fprintf(stderr, "Error al abrir %s \n", *nombrefichero);
+    exit(EXIT_FAILURE);
+  }
+  *lineas = 0;
+  //pa que furule mientras haya datos
+  while ((ch = fgetc(fp)) != EOF){
+//si el caracter que detecta es el salto de linea, aumenta las lineas
+    if(ch == '\n')(*lineas)++;
+  }
+  rewind(fp); //pa volver al principio
+  fclose(fp); //pa cerrar
 }
 
 void instalar_manejador_senhal()
@@ -97,16 +114,12 @@ void procesar_patrones(const char *fichero_patrones)
   fclose(fp);
 }
 
-void procesar_linea(char *linea)
-{
-  char *token;
-
-  token = strtok(linea, " ");
-  while (token != NULL)
-  {
-    insertarFinal(patrones, token);
-    token = strtok(NULL, " ");
-  }
+void procesar_linea(char *linea){
+  char *token_copy = malloc(strlen(token) + 1);
+  strcpy(token_copy, token);
+  insertarFinal(&patrones, token_copy);  // Modificar lista.c para aceptar char*      
+  token = strtok(NULL, " ");
+    
 }
 
 void iniciar_tabla_procesos(int n_procesos_contador, int n_procesos_procesador)
@@ -141,9 +154,9 @@ void crear_procesos(const char *nombre_fichero)
     indice_tabla++;
   }
 
-  for (int i = 2; i <= longitud(patrones); i++)
+  for (int i = 2; i <= longitud(&patrones); i++)
   {
-    lanzar_proceso_procesador(indice_tabla, getElementoN(patrones, i), nombre_fichero);
+    lanzar_proceso_procesador(indice_tabla, getElementoN(&patrones, i), nombre_fichero);
     indice_tabla++;
   }
 
@@ -223,7 +236,7 @@ void esperar_procesos()
 void liberar_recursos()
 {
   free(g_process_table);
-  destruir(patrones);
+  destruir(&patrones);
 }
 
 void terminar_procesos(void)
@@ -254,3 +267,7 @@ void terminar_procesos(void)
 //Leerá su contenido palabra a palabra.
 //Por cada palabra insertará un nodo en una lista empleando la estructura de datos creada en la práctica P1.1.1.
 //Procesando dicha lista, creará un proceso procesador por cada nodo de la misma.
+
+
+//// Esto devuelve un char, pero necesitas un char* (el patrón)
+//char *patron = getElementoN(&patrones, i); en getElementoN 

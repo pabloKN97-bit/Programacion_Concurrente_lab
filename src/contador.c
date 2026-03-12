@@ -1,10 +1,18 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 void contar(char *line, int line_number);
 
 int main(int argc, char *argv[])
 {
   //TODO
+
+  if (argc !=3){
+    //fprintf("Comprobador que funcina el error \n");
+    exit(EXIT_FAILURE);
+  }
+  contar(argv[1], atoi(argv[2]));
 
   return EXIT_SUCCESS;
 }

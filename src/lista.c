@@ -7,7 +7,7 @@ void crear(TLista *pLista, char *valor)
 {
   pLista->pPrimero = malloc(sizeof(TNodo));
   if (pLista->pPrimero != NULL) {
-    pLista->pPrimero->valor = *valor;
+    pLista->pPrimero= NULL;
     pLista->pPrimero->pSiguiente = NULL;
   }
 }
@@ -17,7 +17,7 @@ void destruir(TLista *pLista)
   if (pLista == NULL) return;
   
   TNodo *pAux1;
-  TNodo *pAux2;  // Cambiado a TNodo* en lugar de struct Nodo*
+  TNodo *pAux2;  
 
   for (pAux1 = pLista->pPrimero; pAux1 != NULL;)
   {
@@ -134,7 +134,7 @@ void eliminarN(TLista *pLista, int index)
   }
 }
 
-int getElementoN(TLista *pLista, int index)
+char* getElementoN(TLista *pLista, char index)
 {
   if (index < 1 || pLista->pPrimero == NULL) return -1;  // Error
   

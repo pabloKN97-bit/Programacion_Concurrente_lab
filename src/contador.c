@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 void contar(char *line, int line_number);
 
@@ -41,9 +42,11 @@ void contar(char *linea, int numero_linea)
       dentro_palabra = 1;
     }
   } while (*it++);
-
   printf("[CONTADOR %d] La linea '%d' tiene %d palabras\n", getpid(), numero_linea, n_palabras);
 }
 
 //Contador: estos procesos recibirán en el momento de su creación un número de línea y una
 //línea. Su función consistirá en contar el número de palabras que conforman la línea recibida.
+
+//SOLO FALTA ARREGLAR NUMERO DE LINEA
+//ULTIMO COMENTARIO DEL VIERNES

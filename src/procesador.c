@@ -22,9 +22,8 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "[PROCESADOR %d] Error al abrir %s\n", getpid(), nombre_fichero);
         exit(EXIT_FAILURE);
     }
-    
-    printf("[PROCESADOR %d] Buscando patrón '%s' en %s\n", 
-           getpid(), patron, nombre_fichero);
+    //Quito este print pa que se parezca a la salida del profe
+   // printf("[PROCESADOR %d] Buscando patrón '%s' en %s\n", getpid(), patron, nombre_fichero);
     
     while (fgets(linea, sizeof(linea), fp) != NULL) {
       

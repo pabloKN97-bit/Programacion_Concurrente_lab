@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
   //se lee el archivod e patrones
   procesar_patrones(fichero_patrones, &patrones);
   //crea una tabla de procesos
-  iniciar_tabla_procesos(lineas, longitud(&patrones) - 1);
+  iniciar_tabla_procesos(lineas, longitud(&patrones));
   //esto es pa crear los procesos hijos
   crear_procesos(nombre_fichero, &patrones);
   esperar_procesos();
@@ -129,22 +129,35 @@ void procesar_patrones(const char *fichero_patrones, TLista *patrones)
   fclose(fp);
 }
 
-void procesar_linea(char *linea, TLista *patrones){
-  char *token; 
+void procesar_linea(char *linea, TLista *patrones){ 
   char *linea_copy = malloc(strlen(linea) + 1); //hace una copia de la linea
   strcpy(linea_copy, linea);
-  insertarFinal(patrones, linea_copy);  //inserta la palabra al final de la linea
+  char *token; 
+  int contadorPalabras = 0;
+  token = strtok(linea_copy, " "); //obtiene la primera palabra
 
+  while(token!=NULL){
+    contadorPalabras++;
+
+    char* palabraCopiada = strdup(token); //Copiamos la palabra pillada
+    insertarFinal(patrones, palabraCopiada); // metemos la palabra en la lista de patrones
+    token = strtok(NULL, " "); //Con esto seguimos troceando la linea separando todas las palabras
+
+
+  }
+  printf("La linea posee %d palabras \n", contadorPalabras);
+  
+
+  //libera
+ free(linea_copy);
 
 
   // Modificar lista.c para aceptar char* ; tzmbien arreglar insertar final, que no se que poner 
 
 
-  token = strtok(linea_copy, " "); //obtiene la primera palabra
-    
+ // token = strtok(linea_copy, " "); //obtiene la primera palabra
+    //libera
 }
-//libera
-free(linea_copy);
 void iniciar_tabla_procesos(int n_procesos_contador, int n_procesos_procesador)
 {
   //calcula el total de procesos
@@ -179,7 +192,7 @@ void crear_procesos(const char *nombre_fichero, TLista *patrones)
   while (fgets(linea, sizeof(linea), fp) != NULL)
   {
     //convertimos cada numero de linea a string
-    sprintf(numero_linea_str, "%d", indice_tabla);
+    //sprintf(numero_linea_str, "%d", num_linea);
     lanzar_proceso_contador(indice_tabla, linea, numero_linea_str);
     //falta aumentar de alguna forma la linea donde se encuentra   
     indice_tabla++;
@@ -189,12 +202,12 @@ void crear_procesos(const char *nombre_fichero, TLista *patrones)
   fclose(fp);
 
   //Lanza un proceso por patron
-  for (int i = 2; i <= longitud(&patrones); i++)
+  for (int i = 1; i <= longitud(patrones); i++)
   {
     //obtiene el patron de la lista
     char *patron = getElementoN(patrones, i);
     //lanza la funcion por patron
-    lanzar_proceso_procesador(indice_tabla, getElementoN(&patrones, i), nombre_fichero);
+    lanzar_proceso_procesador(indice_tabla, patron, nombre_fichero); //getElementoN(patrones, i) eliminado para probar sin esto
     indice_tabla++;
   }
 
@@ -256,7 +269,7 @@ void esperar_procesos()
 {
   int i, n_processes = g_nProcesses;
   pid_t pid;
-//bucle en el que espera mientas haya hijos activos
+//bucle en el que espera mientas haya hijos activosindice_tabla
   while (n_processes > 0)
   {
     pid = wait(NULL);

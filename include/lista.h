@@ -4,7 +4,9 @@
 typedef struct TNodo
 {
   char *valor;
-  struct Nodo *pSiguiente;
+
+  struct TNodo *pSiguiente;
+
 } TNodo;
 
 typedef struct
@@ -15,16 +17,16 @@ typedef struct
 void crear(TLista *pLista);
 void destruir(TLista *pLista);
 
-// 'insertar' inserta al ppio de la lista.
+// inserta al princpio de la lista.
 void insertar(TLista *pLista, char *valor);
 void insertarFinal(TLista *pLista, char *valor);
 void insertarN(TLista *pLista, int index, char *valor);
 
-// 'elimina' elimina el último de la lista.
+// elimina el último de la lista.
 void eliminar(TLista *pLista);
 void eliminarN(TLista *pLista, int index);
 
-int getElementoN(TLista *pLista, int index);
+char* getElementoN(TLista *pLista, int index);
 
 void imprimir(TLista *pLista);
 int longitud(TLista *pLista);

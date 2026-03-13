@@ -12,13 +12,13 @@ typedef struct
   TNodo *pPrimero;
 } TLista;
 
-void crear(TLista *pLista, char *valor);
+void crear(TLista *pLista);
 void destruir(TLista *pLista);
 
 // 'insertar' inserta al ppio de la lista.
-void insertar(TLista *pLista, char valor);
-void insertarFinal(TLista *pLista, int valor);
-void insertarN(TLista *pLista, int index, char valor);
+void insertar(TLista *pLista, char *valor);
+void insertarFinal(TLista *pLista, char *valor);
+void insertarN(TLista *pLista, int index, char *valor);
 
 // 'elimina' elimina el último de la lista.
 void eliminar(TLista *pLista);

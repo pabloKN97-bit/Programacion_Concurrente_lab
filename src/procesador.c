@@ -1,3 +1,4 @@
+//no hay modificaciones aqui
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +7,7 @@
 int main(int argc, char *argv[]) {
 
     FILE *fp;
-    char linea[256];
+    char linea[256]; //tamaño del buffer por linea
     int encontrado = 0;
     //error
     if (argc != 3) {
@@ -26,8 +27,12 @@ int main(int argc, char *argv[]) {
            getpid(), patron, nombre_fichero);
     
     while (fgets(linea, sizeof(linea), fp) != NULL) {
+      
+      
         char *token = strtok(linea, " \t\n\r");
         while (token != NULL) {
+      
+      
             if (strcmp(token, patron) == 0) {
                 printf("[PROCESADOR %d] Patrón '%s' ENCONTRADO\n", 
                        getpid(), patron);

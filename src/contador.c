@@ -1,3 +1,4 @@
+//ESto no hace falta modificarlo, se queda tal cual lo dio el profe
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -9,7 +10,6 @@ int main(int argc, char *argv[])
   //TODO
 
   if (argc !=3){
-    //fprintf("Comprobador que funcina el error \n");
     exit(EXIT_FAILURE);
   }
   contar(argv[1], atoi(argv[2]));

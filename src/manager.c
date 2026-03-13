@@ -16,8 +16,8 @@
 void procesar_argumentos(int argc, char *argv[], char **filename, char **pattern, int *lines);
 void instalar_manejador_senhal();
 void manejador_senhal(int sign);
-void procesar_patrones(const char *fichero_patrones);
-void procesar_linea(char *linea);
+void procesar_patrones(const char *fichero_patrones, TLista *patrones);
+void procesar_linea(char *linea, TLista *patrones);
 void iniciar_tabla_procesos(int n_procesos_contador, int n_procesos_procesador);
 void crear_procesos(const char *nombre_fichero, TLista *patrones);
 void lanzar_proceso_contador(const int indice_tabla, const char *linea, const char *numero_linea_str);
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
   //la movida del crtl +c
   instalar_manejador_senhal();
   //se lee el archivod e patrones
-  procesar_patrones(fichero_patrones);
+  procesar_patrones(fichero_patrones, &patrones);
   //crea una tabla de procesos
   iniciar_tabla_procesos(lineas, longitud(&patrones) - 1);
   //esto es pa crear los procesos hijos
@@ -110,7 +110,7 @@ void manejador_senhal(int sign)
   exit(EXIT_SUCCESS);
 }
 
-void procesar_patrones(const char *fichero_patrones)
+void procesar_patrones(const char *fichero_patrones, TLista *patrones)
 {
   FILE *fp;
   char linea[PATH_MAX]; //buffer pa cada linea
@@ -123,13 +123,13 @@ void procesar_patrones(const char *fichero_patrones)
 //lee
   while (fgets(linea, sizeof(linea), fp) != NULL)
   {
-    procesar_linea(linea);
+    procesar_linea(linea, patrones);
   }
 
   fclose(fp);
 }
 
-void procesar_linea(char *linea){
+void procesar_linea(char *linea, TLista *patrones){
   char *token; 
   char *linea_copy = malloc(strlen(linea) + 1); //hace una copia de la linea
   strcpy(linea_copy, linea);

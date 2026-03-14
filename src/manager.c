@@ -177,7 +177,7 @@ void iniciar_tabla_procesos(int n_procesos_contador, int n_procesos_procesador)
 void crear_procesos(const char *nombre_fichero, TLista *patrones)
 {
   FILE *fp;
-  char linea[PATH_MAX], numero_linea_str[3]; //buffer pa cada linea y string para el numero de linea
+  char linea[PATH_MAX], numero_linea_str[12]; //buffer pa cada linea y string para el numero de linea
   int indice_tabla = 0; //indice en la talba del procesos
   int num_linea = 1; //numero de linea actual
   
@@ -192,7 +192,7 @@ void crear_procesos(const char *nombre_fichero, TLista *patrones)
   while (fgets(linea, sizeof(linea), fp) != NULL)
   {
     //convertimos cada numero de linea a string
-    //sprintf(numero_linea_str, "%d", num_linea);
+    sprintf(numero_linea_str, "%d", num_linea);
     lanzar_proceso_contador(indice_tabla, linea, numero_linea_str);
     //falta aumentar de alguna forma la linea donde se encuentra   
     indice_tabla++;

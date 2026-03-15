@@ -1,4 +1,3 @@
-//no hay modificaciones aqui
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,7 +21,6 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "[PROCESADOR %d] Error al abrir %s\n", getpid(), nombre_fichero);
         exit(EXIT_FAILURE);
     }
-    //Quito este print pa que se parezca a la salida del profe
    // printf("[PROCESADOR %d] Buscando patrón '%s' en %s\n", getpid(), patron, nombre_fichero);
     
     while (fgets(linea, sizeof(linea), fp) != NULL) {
@@ -51,6 +49,3 @@ int main(int argc, char *argv[]) {
     fclose(fp);
     return EXIT_SUCCESS;
 }
-//Procesador: estos procesos recibirán en el momento de su creación la ruta del fichero
-//<archivo_texto> y un patrón. Su función consistirá en comprobar si este patrón se corresponde
-//con alguna de las palabras que conforman el texto contenido en el fichero <archivo_texto>.

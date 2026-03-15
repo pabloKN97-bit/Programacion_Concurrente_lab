@@ -1,4 +1,3 @@
-//NOTA IMPORTANTE, lo de los corchetes no da error por ponerlos en la misma linea, daba error porque era un fallo del programa.
 #include <stdio.h>
 #include <stdlib.h>
 #include <lista.h>
@@ -47,7 +46,6 @@ void insertar(TLista *pLista, char *valor)
     return;
   }
 
-  //se copia el STRING, IMPORTANTE, si copias el puntero da error, por eso se copia directamente. NO pregunteis porque da error porque no lo se, solo se que da error
   pNuevo->valor = malloc(strlen(valor) + 1);
   if (pNuevo->valor == NULL)
   {
@@ -127,7 +125,7 @@ void insertarN(TLista *pLista, int index, char *valor)
     
     if (pAux == NULL) {
       // Índice fuera de rango
-      //se meten los free pa evitar las fugas de memoria, es decir, que no queden las variables pululando por el ancho mar de la memoria del ordenador
+      //se meten los free para evitar las fugas de memoria, es decir, que no queden las variables por el ancho mar de la memoria del ordenador
       free(pNuevo->valor);
       free(pNuevo);
     } else {
@@ -155,7 +153,6 @@ void eliminar(TLista *pLista)
   free(pEliminar);
 }
 
-//este se ha quedado tal cual lo dio el profe, o tal cual la ultima actualizacion, lo unico modificado es que ahora tambien se tiene encuetna que pLista pueda ser NULL
 void eliminarN(TLista *pLista, int index)
 {
   if (pLista == NULL || index < 1 || pLista->pPrimero == NULL) return;

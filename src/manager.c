@@ -1,4 +1,4 @@
-//CODIGO TERMINADO y documentado pa el grupo :)
+//CODIGO TERMINADO y documentado para el grupo :)
 //includes
 #include <errno.h>
 #include <linux/limits.h>
@@ -28,31 +28,27 @@ void liberar_recursos(TLista *patrones);
 //variables globales
 int g_nProcesses;
 struct TProcess_t *g_process_table;
-//tLista ya no es aqui, si no dentro del main como variable local del main
-
 
 int main(int argc, char *argv[])
-//falta echarle un vistazo al main que hay cosas que no funcionan
 {
   //variables locales
   char *nombre_fichero = NULL, *fichero_patrones = NULL; //dos char, uno con el nombre del fichero y otro con los patrones
   int lineas = 0; //se inicializa el numero de lineas procesadas a 0
-  TLista patrones; //una lista pa guardar el numero de patrones
-  //da error al asignar memoria con malloc, hay que revisarlo
-  //patrones = malloc(sizeof(TLista));
+  TLista patrones; //una lista para guardar el numero de patrones
+    //patrones = malloc(sizeof(TLista));
   
-//cambiar crear(&patrones)
-//crea una lista
+
+  //crea una lista
   crear(&patrones);
   //llenamos el fichero 
   procesar_argumentos(argc, argv, &nombre_fichero, &fichero_patrones, &lineas);
-  //la movida del crtl +c
+  //señal crtl +c
   instalar_manejador_senhal();
-  //se lee el archivod e patrones
+  //se lee el archivo de patrones
   procesar_patrones(fichero_patrones, &patrones);
   //crea una tabla de procesos
   iniciar_tabla_procesos(lineas, longitud(&patrones));
-  //esto es pa crear los procesos hijos
+  //esto es para crear los procesos hijos
   crear_procesos(nombre_fichero, &patrones);
   esperar_procesos();
 
@@ -67,7 +63,7 @@ void procesar_argumentos(int argc, char *argv[], char **nombrefichero, char **fi
   FILE *fp; //puntero a archivo
   int ch;
   //verifica que hay 3 argumentos exactos, que son el nombre de programa + 2 archivos que se tienen que introducir segun la especificacion del enunciado,
-  //si no hay 3 da el error ese con el print y finiquita el programa
+  //si no hay 3 da el error con el print y termina el programa
   if (argc != 3)
   {
     fprintf(stderr, "Error. Usa: ./exec/manager <fichero> <fichero_patrones>.\n");
@@ -77,20 +73,20 @@ void procesar_argumentos(int argc, char *argv[], char **nombrefichero, char **fi
   *nombrefichero = argv[1];
   *fichero_patrones = argv[2];
 
-  //pa contar las lineas del archivo de texto
+  //para contar las lineas del archivo de texto
   if((fp = fopen(*nombrefichero, "r")) == NULL){
     //fprintf es como printf de JAva, para añadir datos a media frase sin necesidad de cortarla
     fprintf(stderr, "Error al abrir %s \n", *nombrefichero);
     exit(EXIT_FAILURE);
   }
   *lineas = 0;
-  //pa contar saltos de linea
+  //para contar saltos de linea
   while ((ch = fgetc(fp)) != EOF){
 //si el caracter que detecta es el salto de linea, aumenta las lineas
     if(ch == '\n')(*lineas)++;
   }
-  //rewind(fp); //pa volver al principio
-  fclose(fp); //pa cerrar
+  //rewind(fp); //para volver al principio
+  fclose(fp); //para cerrar
 }
 
 void instalar_manejador_senhal()
@@ -101,7 +97,7 @@ void instalar_manejador_senhal()
     exit(EXIT_FAILURE);
   }
 }
-//esto se lo carga to, el terminar proceso a los hijos, liberar pues libera y exit termina
+//esto se lo carga todo, el terminar proceso a los hijos, liberar, libera y exit termina
 void manejador_senhal(int sign)
 {
   printf("\n[MANAGER] Terminacion del programa (Ctrl + C).\n");
@@ -113,7 +109,7 @@ void manejador_senhal(int sign)
 void procesar_patrones(const char *fichero_patrones, TLista *patrones)
 {
   FILE *fp;
-  char linea[PATH_MAX]; //buffer pa cada linea
+  char linea[PATH_MAX]; //buffer para cada linea
 
   if ((fp = fopen(fichero_patrones, "r")) == NULL)
   {
@@ -152,8 +148,6 @@ void procesar_linea(char *linea, TLista *patrones){
  free(linea_copy);
 
 
-  // Modificar lista.c para aceptar char* ; tzmbien arreglar insertar final, que no se que poner 
-
 
  // token = strtok(linea_copy, " "); //obtiene la primera palabra
     //libera
@@ -177,7 +171,7 @@ void iniciar_tabla_procesos(int n_procesos_contador, int n_procesos_procesador)
 void crear_procesos(const char *nombre_fichero, TLista *patrones)
 {
   FILE *fp;
-  char linea[PATH_MAX], numero_linea_str[12]; //buffer pa cada linea y string para el numero de linea
+  char linea[PATH_MAX], numero_linea_str[12]; //buffer para cada linea y string para el numero de linea
   int indice_tabla = 0; //indice en la talba del procesos
   int num_linea = 1; //numero de linea actual
   
@@ -207,12 +201,12 @@ void crear_procesos(const char *nombre_fichero, TLista *patrones)
     //obtiene el patron de la lista
     char *patron = getElementoN(patrones, i);
     //lanza la funcion por patron
-    lanzar_proceso_procesador(indice_tabla, patron, nombre_fichero); //getElementoN(patrones, i) eliminado para probar sin esto
+    lanzar_proceso_procesador(indice_tabla, patron, nombre_fichero); 
     indice_tabla++;
   }
 
   printf("[MANAGER] %d procesos creados.\n", indice_tabla);
-//uso un sleep porque los hijos me crasheaban y no les daba tiempo a iniciar, entonces con el sleep paramos el programa 1 seg y asi les da tiempo a funcionar
+//uso un sleep porque los hijos me daban fallo y no les daba tiempo a iniciar, entonces con el sleep paramos el programa 1 seg y asi les da tiempo a funcionar
   sleep(1);
 
 
@@ -221,13 +215,12 @@ void crear_procesos(const char *nombre_fichero, TLista *patrones)
 void lanzar_proceso_contador(const int indice_tabla, const char *linea, const char *numero_linea_str)
 {
   pid_t pid;
-//se crean los nenes
+//se crean los hijos
   switch (pid = fork())
   {
   case -1: //caso de error
     fprintf(stderr, "[MANAGER] Error al lanzar proceso contador: %s.\n", strerror(errno));
     terminar_procesos();
-//    liberar_recursos();
     exit(EXIT_FAILURE);
   case 0: //caso existoso
     if (execl(RUTA_CONTADOR, CLASE_CONTADOR, linea, numero_linea_str, NULL) == -1)
@@ -319,18 +312,3 @@ void terminar_procesos(void)
     }
   }
 }
-
-//NOTA: el cacharro este { } se pone debajo de la fucnion y no a su lado como en java, que luego me da error
-//Manager: este proceso será responsable de crear un número determinado de procesos de tipo
-//procesador y de tipo contador, gestionando de manera adecuada su finalización y liberando
-//los recursos previamente reservados. Este proceso recibirá por la línea de órdenes la ruta de dos ficheros.
-//<archivo_texto>: será abierto por el proceso manager.
-//Leerá su contenido línea a línea.
-//<archivo_patrones>: este será procesado por el proceso manager.
-//Leerá su contenido palabra a palabra.
-//Por cada palabra insertará un nodo en una lista empleando la estructura de datos creada en la práctica P1.1.1.
-//Procesando dicha lista, creará un proceso procesador por cada nodo de la misma.
-
-
-//// Esto devuelve un char, pero necesitas un char* (el patrón)
-//char *patron = getElementoN(&patrones, i); en getElementoN 
